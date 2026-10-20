@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Correspondencia · Prototipo</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header class="cabecera">
+    <div class="cabecera-fila">
+      <h1>Correspondencia · Prototipo de testeo</h1>
+      <button class="btn btn-reiniciar" data-act="reiniciar">Reiniciar demostración</button>
+    </div>
+    <p class="banda">Prototipo de investigación. Solo datos ficticios. No se envían cartas reales. No usar para gestionar pacientes o cartas reales.</p>
+  </header>
+
+  <main>
+    <section class="roles" aria-label="Rol en prueba">
+      <p class="roles-titulo">Estoy probando el rol de…</p>
+      <div class="roles-botones">
+        <button class="rol" data-act="rol" data-id="Coordinación">Coordinación</button>
+        <button class="rol" data-act="rol" data-id="Escritora">Escritora</button>
+        <button class="rol" data-act="rol" data-id="Mediadora">Mediadora</button>
+        <button class="rol" data-act="rol" data-id="Referente institucional">Referente institucional</button>
+      </div>
+      <label id="persona-wrap" class="persona" hidden>Soy: <select id="persona"></select></label>
+      <p id="rol-ayuda" class="ayuda"></p>
+    </section>
+
+    <div id="aviso" aria-live="polite"></div>
+    <div id="vista"></div>
+
+    <details id="registro-wrap" class="registro">
+      <summary>Registro de la demostración</summary>
+      <ol id="registro"></ol>
+    </details>
+  </main>
+
+  <script src="datos.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
