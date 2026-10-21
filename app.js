@@ -10,6 +10,7 @@ const ui = {
   carpeta: {},             // carpeta abierta por rol
   confirmar: null,         // confirmación pendiente de una acción de riesgo
   noEntrega: false,        // mostrando el formulario de motivo de no entrega
+  foco: null,              // id del elemento que recibe el foco tras redibujar
   verRegistro: false, confirmarReinicio: false,
   borradores: {}, imagenes: {}, modoCarta: {}
 };
@@ -77,29 +78,29 @@ function estadoCarta(l) {
     default: return l.estado;
   }
 }
+// [responsable ahora, qué sigue después y quién continúa] — no repite los botones
 function flujoCarta(l) {
   switch (l.estado) {
-    case 'Borrador': return [l.autora, 'Terminarla y enviarla a revisión'];
-    case 'En revisión': return ['Coordinación', 'Revisar: aprobar, pedir ajustes o rechazar'];
-    case 'Requiere cambios': return [l.autora, 'Ajustarla y reenviarla a revisión'];
-    case 'Aprobada': return ['Coordinación', 'Preparar la entrega'];
+    case 'Borrador': return [l.autora, 'Solo la autora la ve. Al enviarla, pasa a revisión de Coordinación.'];
+    case 'En revisión': return ['Coordinación', 'Si se aprueba, Coordinación prepara su entrega. Si necesita ajustes, vuelve a la escritora.'];
+    case 'Requiere cambios': return [l.autora, 'Al reenviarla, vuelve a revisión de Coordinación.'];
+    case 'Aprobada': return ['Coordinación', 'Al prepararla, la mediadora o el referente elegido deberá entregarla en mano.'];
     case 'Entrega preparada':
-      if (l.responsable !== REFERENTE) return [l.responsable, 'Entregarla en mano y registrar qué pasó'];
-      if (l.pasoRef) return [REFERENTE, 'Entregarla en mano y registrarlo'];
-      return [REFERENTE, S.modoReferente === 'A' ? 'Confirmar que llegó el sobre' : 'Imprimirla (simulado)'];
-    case 'No entregada': return ['Coordinación', 'Decidir un nuevo intento de entrega'];
-    case 'Entregada en mano': return ['Nadie', 'Ninguno: entrega completada'];
-    case 'Rechazada': return ['Nadie', 'Ninguno: la carta no se entregará'];
+      if (l.responsable !== REFERENTE) return [l.responsable, 'Tras la visita se registra si se entregó. Si no se pudo, vuelve a Coordinación.'];
+      return [REFERENTE, l.pasoRef ? 'Falta registrar la entrega en mano.' : `Primero ${S.modoReferente === 'A' ? 'se confirma la recepción del sobre' : 'se imprime (simulado)'}; después se registra la entrega en mano.`];
+    case 'No entregada': return ['Coordinación', 'Coordinación decide si la prepara de nuevo para otra visita.'];
+    case 'Entregada en mano': return ['Nadie', 'No quedan pasos: la entrega está completa.'];
+    case 'Rechazada': return ['Nadie', 'No quedan pasos: la carta no se entregará.'];
   }
   return ['—', '—'];
 }
 function flujoRespuesta(r) {
-  const c = caso(r.caso);
+  const c = caso(r.caso), esc_ = c.escritora || 'la escritora del caso';
   switch (r.estado) {
-    case 'Versión aprobada (simulado)': return [r.mediadora, 'Enviarla a Coordinación'];
-    case 'En Coordinación': return ['Coordinación', `Traspasarla a ${c.escritora || 'la escritora del caso'}`];
-    case 'Entregada a la escritora (simulado)': return r.leida ? ['Nadie', 'Ninguno: respuesta leída'] : [c.escritora || 'Escritora', 'Leer la respuesta'];
-    default: return [r.mediadora, `Revisarla con ${c.nombre} y registrar su aprobación`];
+    case 'Versión aprobada (simulado)': return [r.mediadora, `Al enviarla, Coordinación la traspasa a ${esc_} sin modificarla.`];
+    case 'En Coordinación': return ['Coordinación', `Coordinación la traspasa a ${esc_}. Nadie puede editarla.`];
+    case 'Entregada a la escritora (simulado)': return r.leida ? ['Nadie', 'No quedan pasos: la respuesta fue leída.'] : [esc_, `${esc_} puede leerla. No quedan más pasos.`];
+    default: return [r.mediadora, `Solo se envía la versión que ${c.nombre} apruebe. Si el texto cambia, hay que aprobarlo de nuevo.`];
   }
 }
 function estadoCaso(c) {
@@ -110,10 +111,10 @@ function estadoCaso(c) {
   return 'Activa';
 }
 function flujoCaso(c) {
-  if (c.cerrada) return ['Nadie', 'Ninguno: correspondencia cerrada'];
-  if (c.ausencia?.estado === 'Ausencia comunicada') return ['Coordinación', 'Asignar suplente o cerrar la correspondencia'];
-  if (!c.escritora || !c.mediadora) return ['Coordinación', 'Asignar escritora y mediadora'];
-  return [c.escritora, 'Escribir cartas cuando quiera'];
+  if (c.cerrada) return ['Nadie', 'No quedan pasos: la correspondencia está cerrada.'];
+  if (c.ausencia?.estado === 'Ausencia comunicada') return ['Coordinación', 'Coordinación asigna una suplente o cierra la correspondencia. Mientras, no se escriben cartas.'];
+  if (!c.escritora || !c.mediadora) return ['Coordinación', 'Al asignar responsables, el caso aparece en sus bandejas.'];
+  return [c.escritora, 'La escritora escribe cuando quiera; cada carta pasa por revisión antes de entregarse.'];
 }
 
 /* =========================================================
@@ -278,15 +279,16 @@ const opciones = (lista, sel, vacio) => (vacio ? `<option value="">${vacio}</opt
   lista.map(p => `<option value="${esc(p)}" ${p === sel ? 'selected' : ''}>${esc(p)}</option>`).join('');
 
 function panel({ estado, flujo, datos = [], hist, notas = false, notaDe = '', extra = '' }) {
-  const [resp, paso] = flujo;
+  const [resp, sigue] = flujo;
   const visibles = hist ? hist.filter(e => notas || !e.nota) : [];
+  // Jerarquía: estado y responsable → qué sigue → datos secundarios → historial (contraído)
   return `<aside class="contexto" aria-label="Estado y seguimiento">
-    <dl class="contexto-datos">
-      <div><dt>Estado</dt><dd><strong>${esc(estado)}</strong></dd></div>
+    <dl class="ctx-principal">
+      <div><dt>Estado actual</dt><dd>${esc(estado)}</dd></div>
       <div><dt>Responsable ahora</dt><dd>${esc(resp)}</dd></div>
-      <div><dt>Próximo paso</dt><dd>${esc(paso)}</dd></div>
-      ${datos.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}
     </dl>
+    <p class="ctx-sigue"><span class="ctx-etq">Qué sigue</span>${esc(sigue)}</p>
+    ${datos.length ? `<dl class="ctx-meta">${datos.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` : ''}
     ${extra}
     ${hist ? `<details class="historial"><summary>Historial${notas ? ' y notas internas' : ''} (${visibles.length})</summary>
       <ol>${visibles.slice().reverse().map(e => `<li class="${e.nota ? 'es-nota' : ''}"><span class="hora">${esc(e.hora)} · ${esc(e.quien)}</span>${e.nota ? '<span class="etq-nota">Nota interna</span>' : ''}<span>${esc(e.texto)}</span></li>`).join('') || '<li>Sin movimientos.</li>'}</ol>
@@ -358,15 +360,31 @@ function detalleCarta(l) {
   }
   else if (S.rol === 'Coordinación' && l.estado === 'En revisión') {
     titulo = 'Revisar carta';
-    // Sin botón dominante: no inducir la decisión que se quiere observar en el testeo
-    accion = `<label class="campo"><span class="campo-etiqueta">Indicación para la escritora <span class="campo-ayuda">(no se agrega a la carta · obligatoria para pedir ajustes o rechazar)</span></span>
-        <textarea id="mot-${l.id}" data-keep rows="3"></textarea></label>
-      <div class="acciones">
-        <button class="btn sec" data-act="aprobar" data-id="${l.id}">Aprobar carta</button>
-        <button class="btn sec" data-act="devolver" data-id="${l.id}">Pedir ajustes</button>
-        <button class="btn riesgo" data-act="rechazar" data-id="${l.id}">Rechazar…</button>
-      </div>
-      ${confirmacion('rechazar-' + l.id, '¿Rechazar esta carta? No podrá entregarse y la escritora verá el motivo.', 'Sí, rechazar', 'rechazarSi', l.id)}`;
+    // Tres decisiones sin botón dominante: no inducir la decisión que se quiere observar.
+    // El campo de indicación aparece solo al pedir ajustes o rechazar.
+    const abierto = ui.confirmar === 'ajustes-' + l.id ? 'ajustes' : ui.confirmar === 'rechazar-' + l.id ? 'rechazar' : null;
+    const campoMotivo = (etq, ayuda) => `<label class="campo"><span class="campo-etiqueta">${etq} <span class="campo-ayuda">${ayuda}</span></span>
+        <textarea id="mot-${l.id}" data-keep rows="3" aria-required="true"></textarea></label>`;
+    accion = !abierto
+      ? `<p class="pregunta" id="dec-titulo">Decisión de revisión</p>
+        <div class="acciones" role="group" aria-labelledby="dec-titulo">
+          <button class="btn sec" id="dec-aprobar-${l.id}" data-act="aprobar" data-id="${l.id}">Aprobar carta</button>
+          <button class="btn sec" id="dec-ajustes-${l.id}" data-act="devolver" data-id="${l.id}" aria-haspopup="true">Pedir ajustes…</button>
+          <button class="btn riesgo" id="dec-rechazar-${l.id}" data-act="rechazar" data-id="${l.id}" aria-haspopup="true">Rechazar…</button>
+        </div>`
+      : abierto === 'ajustes'
+      ? `<div class="bloque-decision" role="region" aria-label="Pedir ajustes">
+          <p class="pregunta">Pedir ajustes a ${esc(l.autora)}</p>
+          ${campoMotivo('¿Qué debe cambiar?', '(obligatorio · indicación interna, no se agrega a la carta)')}
+          <div class="acciones"><button class="btn" data-act="devolverSi" data-id="${l.id}">Confirmar solicitud</button>
+            <button class="btn texto" data-act="cancelarDecision" data-id="${l.id}:ajustes">Cancelar</button></div>
+        </div>`
+      : `<div class="confirmacion" role="region" aria-label="Rechazar carta">
+          <p><strong>¿Rechazar esta carta?</strong> No podrá entregarse y ${esc(l.autora)} verá el motivo.</p>
+          ${campoMotivo('Motivo del rechazo', '(obligatorio)')}
+          <div class="acciones"><button class="btn riesgo-lleno" data-act="rechazarSi" data-id="${l.id}">Confirmar rechazo</button>
+            <button class="btn texto" data-act="cancelarDecision" data-id="${l.id}:rechazar">Cancelar</button></div>
+        </div>`;
   }
   else if (S.rol === 'Coordinación' && ['Aprobada', 'No entregada'].includes(l.estado)) {
     titulo = l.estado === 'Aprobada' ? 'Preparar entrega' : 'Resolver entrega fallida';
@@ -416,7 +434,7 @@ function detalleEscribir(c) {
         : `<p class="nota">¿No puedes continuar con ${esc(c.nombre)}?</p><button class="btn texto" data-act="pedirAusencia" data-id="${k}">Avisar ausencia</button>`}</div>`;
   const panelHTML = panel({
     estado: bloqueado ? estadoCaso(c) : 'Carta nueva · sin guardar',
-    flujo: bloqueado ? flujoCaso(c) : ['Tú', 'Enviarla a revisión (o guardarla como borrador)'],
+    flujo: bloqueado ? flujoCaso(c) : ['Tú', 'Al enviarla, Coordinación la revisa antes de cualquier entrega. Un borrador solo lo ves tú.'],
     datos: [['Para', nombreCaso(k)], ['Sobre la persona', c.responde ? 'Puede responder si quiere. Es posible que no responda.' : 'Recibe cartas, pero prefirió no responder.']],
     extra
   });
@@ -547,9 +565,15 @@ const acciones = {
       { obj: c, ev: `Asignó a ${c.escritora || 'nadie'} (escritora) y ${c.mediadora || 'nadie'} (mediadora).` });
   },
   aprobar(id) { revisar(id, 'Aprobada'); },
-  devolver(id) { revisar(id, 'Requiere cambios'); },
-  rechazar(id) { if (!valor('mot-' + id)) return error('Escribe el motivo antes de rechazar la carta.'); ui.confirmar = 'rechazar-' + id; render(); },
+  // Pedir ajustes y Rechazar abren su propio bloque con el campo obligatorio
+  devolver(id) { ui.confirmar = 'ajustes-' + id; ui.foco = 'mot-' + id; render(); },
+  rechazar(id) { ui.confirmar = 'rechazar-' + id; ui.foco = 'mot-' + id; render(); },
+  devolverSi(id) { revisar(id, 'Requiere cambios'); },
   rechazarSi(id) { revisar(id, 'Rechazada'); },
+  cancelarDecision(v) {
+    const [id, cual] = v.split(':');
+    tomar('mot-' + id); ui.confirmar = null; ui.foco = `dec-${cual}-${id}`; render();
+  },
   preparar(id) {
     const l = carta(id);
     if (!['Aprobada', 'No entregada'].includes(l.estado)) return error('Solo se puede preparar una carta aprobada.');
@@ -645,11 +669,11 @@ function revisar(id, estado) {
   const l = carta(id);
   if (l.estado !== 'En revisión') return;
   const motivo = valor('mot-' + id);
-  if (estado !== 'Aprobada' && !motivo) return error('Escribe la indicación antes de pedir ajustes o rechazar la carta.');
+  if (estado !== 'Aprobada' && !motivo) { error('Escribe la indicación antes de pedir ajustes o rechazar la carta.'); document.getElementById('mot-' + id)?.focus(); return; }
   tomar('mot-' + id);
   l.estado = estado; l.comentario = motivo || null;
   const t = {
-    'Aprobada': [`Carta ${id} aprobada. Ahora está en «Por preparar»: falta preparar su entrega.`, 'Aprobó la carta.'],
+    'Aprobada': [`Carta ${id} aprobada. Ahora Coordinación debe preparar su entrega (está en «Por preparar»).`, 'Aprobó la carta.'],
     'Requiere cambios': [`Carta ${id} devuelta. Ahora ${l.autora} debe ajustarla.`, `Pidió ajustes: ${motivo}`],
     'Rechazada': [`Carta ${id} rechazada. No se entregará; ${l.autora} verá el motivo.`, `Rechazó la carta: ${motivo}`]
   }[estado];
@@ -758,6 +782,7 @@ function render() {
   });
   $('#registro-panel').hidden = !ui.verRegistro;
   renderOpciones(); renderAviso(); renderRegistro();
+  if (ui.foco) { document.getElementById(ui.foco)?.focus(); ui.foco = null; }
 }
 function renderOpciones() {
   $('#opciones-menu').innerHTML = ui.confirmarReinicio

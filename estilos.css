@@ -1,4 +1,4 @@
-/* V4 · Light mode casi monocromático.
+/* V2.1 (sobre V4) · Light mode casi monocromático.
    Un solo color funcional: rojo, para incidencias, errores y acciones de riesgo. */
 :root {
   color-scheme: light;
@@ -58,6 +58,8 @@ h1:focus { outline: none; }
 .rol:hover { color: var(--tinta); background: var(--suave); }
 .rol[aria-pressed="true"] { color: var(--tinta); border-color: var(--tinta); font-weight: 600; }
 .persona { display: flex; align-items: center; gap: 4px; }
+/* Etiqueta discreta: el selector es solo del prototipo, no un acceso real */
+.modo-prueba { font-size: 13px; color: var(--secundario); border: 1px dashed var(--borde-fuerte); border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
 .persona select, .modalidad select { font: inherit; font-size: 15px; padding: 4px 8px; border: 1px solid var(--borde-fuerte); border-radius: 6px; background: var(--superficie); color: var(--tinta); }
 
 /* ---------- Nivel 1 · Bandeja ---------- */
@@ -115,15 +117,19 @@ h1:focus { outline: none; }
 .hecho { font-weight: 600; margin: 0 0 10px; }
 
 .contexto { background: var(--superficie); border: 1px solid var(--borde); border-radius: 10px; padding: 16px 18px; font-size: 15px; position: sticky; top: 16px; }
-.contexto-datos { margin: 0; }
-.contexto-datos div { padding: 8px 0; border-top: 1px solid var(--borde); }
-.contexto-datos div:first-child { border-top: 0; padding-top: 0; }
-.contexto-datos dt { font-size: 13px; color: var(--secundario); }
-.contexto-datos dd { margin: 0; }
-.contexto-extra { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--borde); }
+.ctx-principal { margin: 0; display: grid; gap: 12px; }
+.ctx-principal dt, .ctx-etq { display: block; font-size: 13px; color: var(--secundario); }
+.ctx-principal dd { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.35; }
+.ctx-sigue { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--borde); line-height: 1.45; }
+.ctx-meta { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--borde); display: grid; gap: 6px; font-size: 14px; }
+.ctx-meta div { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 8px; }
+.ctx-meta dt { color: var(--secundario); }
+.ctx-meta dd { margin: 0; color: var(--tinta); }
+.ctx-meta .nota { font-size: 13px; margin: 0; }
+.contexto-extra { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--borde); }
 .contexto-extra .nota { margin: 0; }
 .contexto-extra .btn.texto { padding-left: 0; }
-.historial { margin-top: 12px; border-top: 1px solid var(--borde); padding-top: 10px; }
+.historial { margin-top: 14px; border-top: 1px solid var(--borde); padding-top: 12px; }
 .historial summary { cursor: pointer; font-weight: 600; font-size: 14px; }
 .historial ol { list-style: none; padding: 0; margin: 10px 0 0; }
 .historial li { display: flex; flex-direction: column; padding: 6px 0; border-top: 1px dotted var(--borde); }
@@ -169,6 +175,8 @@ textarea.editor { min-height: 200px; font-size: 17px; line-height: 1.6; }
 .bloqueo { font-size: 15px; color: var(--secundario); margin: 8px 0 0; }
 .confirmacion { margin-top: 12px; padding: 12px 14px; border: 1px solid var(--rojo); border-radius: 8px; background: var(--rojo-fondo); }
 .confirmacion p { margin: 0 0 10px; }
+.bloque-decision { padding: 12px 14px; border: 1px solid var(--borde-fuerte); border-radius: 8px; background: var(--superficie); }
+.bloque-decision .pregunta, .confirmacion .pregunta { margin-bottom: 8px; }
 
 /* Pasos del referente */
 .pasos { list-style: none; margin: 0; padding: 0; }
@@ -205,7 +213,6 @@ textarea.editor { min-height: 200px; font-size: 17px; line-height: 1.6; }
   .fila { grid-template-columns: minmax(0, 1fr); gap: 2px; }
   .fila-accion { justify-self: start; margin-top: 4px; }
   .roles { flex-wrap: nowrap; overflow-x: auto; width: 100%; gap: 2px; }
-  .roles > .barra-etiqueta { display: none; }
   .rol { font-size: 14px; padding: 5px 5px; white-space: nowrap; }
   .carpeta { font-size: 14px; padding: 10px 6px; }
   .cuenta { min-width: 18px; padding: 0 5px; margin-left: 2px; font-size: 12px; }

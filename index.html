@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <title>Correspondencia · Prototipo</title>
-  <link rel="stylesheet" href="estilos.css?v=4">
+  <link rel="stylesheet" href="estilos.css?v=5">
 </head>
 <body>
   <header class="cabecera">
@@ -19,15 +19,16 @@
         <div class="opciones-menu" id="opciones-menu"></div>
       </details>
     </div>
+    <!-- Selector solo para simular el recorrido en un navegador: no es un acceso real -->
     <div class="contenedor barra-rol">
-      <div class="roles" role="group" aria-label="Rol en prueba">
-        <span class="barra-etiqueta">Rol</span>
+      <span class="modo-prueba" id="modo-prueba">Vista de prueba · cambiar rol</span>
+      <div class="roles" role="group" aria-labelledby="modo-prueba">
         <button class="rol" data-act="rol" data-id="Coordinación">Coordinación</button>
         <button class="rol" data-act="rol" data-id="Escritora">Escritora</button>
         <button class="rol" data-act="rol" data-id="Mediadora">Mediadora</button>
         <button class="rol" data-act="rol" data-id="Referente institucional">Referente</button>
       </div>
-      <label id="persona-wrap" class="persona" hidden><span class="barra-etiqueta">Persona</span> <select id="persona"></select></label>
+      <label id="persona-wrap" class="persona" hidden><span class="barra-etiqueta">Persona ficticia</span> <select id="persona"></select></label>
     </div>
   </header>
 
@@ -46,7 +47,7 @@
 
   <div id="aviso" class="aviso-flotante" role="status" aria-live="polite"></div>
 
-  <script src="datos.js?v=4"></script>
-  <script src="app.js?v=4"></script>
+  <script src="datos.js?v=5"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
