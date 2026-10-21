@@ -1,52 +1,45 @@
-# Guía rápida · Prototipo de correspondencia V3 (testeo con voluntarios)
+# Guía rápida · Prototipo de correspondencia V4 (testeo con voluntarios)
 
 **Solo datos ficticios. No se envía nada a nadie. El estado se guarda solo en este navegador.**
 
 ## Abrir
 - Enlace publicado, o doble clic en `index.html` (Chrome, Safari o Firefox). No necesita internet.
-- Usa **siempre el mismo navegador y computador** durante una sesión: el cambio de rol muestra los cambios porque todo queda guardado ahí.
+- Usa **siempre el mismo navegador y computador** durante una sesión: el cambio de rol muestra los cambios porque todo queda guardado ahí. No hay colaboración entre computadores.
 
 ## Antes de cada participante
 1. Arriba a la derecha: **Opciones de prueba → Reiniciar demostración… → Sí, reiniciar**.
-2. Comprueba: rol *Coordinación*, pestaña *Por resolver (3)*, Elena (E-07) en «Asignar personas».
+2. Comprueba: rol *Coordinación*, carpeta *Pendientes 3*, Elena (E-07) en «Por asignar».
 
-## Durante la prueba (controles de quien facilita)
-- **Rol** (bajo el título): Coordinación · Escritora · Mediadora · Referente.
-- En Escritora y Mediadora aparece **Persona** (por ejemplo, *Escritora 2 · 1 caso*). Si una tarea no aparece, revisa que esté elegida la persona asignada al caso.
-- **Opciones de prueba → Ver registro de la demostración**: lista de acciones con hora y rol (evidencia). Ocúltalo antes de pasar el computador al voluntario.
-- Tras cada acción aparece un aviso breve abajo de la pantalla.
+## Cómo funciona (tres niveles)
+1. **Bandeja** del rol: carpetas *Pendientes / En curso / Historial* (Coordinación agrega *Casos*). Cada fila muestra persona, contexto, estado y acción siguiente.
+2. **Detalle**: al abrir una fila, la carta (o el caso) queda al centro. Al lado, o debajo en el teléfono: **Estado, Responsable ahora y Próximo paso**, con el historial plegado.
+3. **Acción**: al actuar, se vuelve a la bandeja con un aviso que dice **qué cambió y quién sigue**.
 
-## Cómo está organizada cada vista
-- **Coordinación:** pestañas *Por resolver* (avisos → asignar → revisar → preparar), *Casos* y *Seguimiento* (solo consulta).
-- **Escritora:** *Cartas para corregir* (solo si hay) → *Personas asignadas* → *Mis cartas*.
-- **Mediadora:** *Entregas para tu visita* → *Respuestas por gestionar* → *Mis casos* → *Ya registrado*.
-- **Referente:** primero se elige la *Modalidad en prueba* (A o B); luego, dos pasos numerados.
-
-Cada elemento se abre con su botón y solo hay uno abierto a la vez. Lo escrito no se pierde al cambiar de rol o de pestaña.
+Controles de quien facilita: **Rol** y **Persona** bajo el título; **Opciones de prueba → Ver registro de la demostración** (ocúltalo antes de pasar el computador).
 
 ## Las ocho tareas (en orden recomendado)
-| N.º | Rol / persona | Dónde mirar |
+| N.º | Rol / persona | Recorrido |
 |---|---|---|
-| 1 | Coordinación | Por resolver → Asignar personas → Elena → **Asignar** → **Guardar asignación** |
-| 2 | Escritora (la asignada a Elena) | **Escribir una carta** → **Enviar a revisión** |
-| 3 | Escritora | **Agregar manuscrita** → foto propia o **Usar imagen de ejemplo** → **Enviar a revisión** |
-| 4 | Coordinación | Revisar cartas → C-01 (Patricia) → **Revisar carta**: motivo + Aprobar / Devolver para corregir / Rechazar… |
-| 5 | Coordinación | Preparar entregas → **Preparar entrega** → elegir quién la lleva |
-| 6 | Mediadora 2 | C-03 **Registrar entrega → Entregada en mano** · C-04 **Registrar entrega → No se pudo entregar** → *Persona no encontrada* |
-| 7 | Mediadora 2 | R-01 → **Revisar respuesta** → **Registrar aprobación…** → **Enviar respuesta (simulado)**. Si se edita el texto, la aprobación se anula |
-| 8 | Escritora de Elena → Coordinación | **Avisar ausencia** → Coordinación: Avisos → **Resolver aviso** → **Asignar suplente** o **Cerrar correspondencia…** |
-| Extra | Referente institucional | Modalidad **A** (sobre impreso) o **B** (imprimir allí). Probar una por participante |
+| 1 | Coordinación | Pendientes → Por asignar → Elena → **Guardar asignación** |
+| 2 | Escritora (la asignada a Elena) | Mis personas → Elena → escribir → **Enviar a revisión** (o **Guardar borrador** y continuar después) |
+| 3 | Escritora | Elena → **Carta manuscrita (imagen)** → foto propia o **Usar imagen de ejemplo** → **Enviar a revisión** |
+| 4 | Coordinación | Por revisar → C-01 (Patricia) → indicación + **Aprobar carta / Pedir ajustes / Rechazar…** |
+| 5 | Coordinación | Por preparar → **Preparar entrega** → elegir quién la lleva |
+| 6 | Mediadora 2 | C-03 → **Entregada en mano** · C-04 → **No se pudo entregar** → *Persona no encontrada* |
+| 7 | Mediadora 2 → Coordinación | R-01 → **Registrar aprobación…** → **Enviar a Coordinación**. Si se edita el texto, la aprobación se anula. Luego, Coordinación: Respuestas por traspasar → **Traspasar** |
+| 8 | Escritora de Elena → Coordinación | Elena → **Avisar ausencia** → Coordinación: Incidencias → **Asignar suplente** o **Cerrar correspondencia…** |
+| Extra | Referente institucional | Elegir la **Modalidad en prueba** (A o B) y probar una por participante |
 
-Las cartas marcadas **DEMO** son anteriores o de muestra, para no depender de tareas previas.
+Las cartas marcadas **DEMO** son anteriores o de muestra. **Nota interna** (Coordinación y Mediadora): en el detalle, *Historial y notas internas*. No forma parte de la carta y la escritora no la ve.
 
-## Qué observar (evidencia para decidir cambios)
-- ¿Encuentra sus pendientes sin ayuda? ¿Entiende quién actúa después?
-- ¿Detecta el consejo de salud y la pregunta por la comuna en C-01? (Aprobar y Devolver tienen el mismo peso visual, a propósito.)
+## Qué observar
+- ¿Encuentra su tarea en la bandeja sin ayuda? ¿Sabe quién sigue después de actuar?
+- ¿Detecta el consejo de salud y la pregunta por la comuna en C-01? (Aprobar y Pedir ajustes tienen el mismo peso visual, a propósito.)
 - ¿Distingue «Preparada · aún no entregada» de «Entregada en mano»?
-- ¿Revisa con la persona el dato de salud de R-01 antes de enviar? ¿Nota que editar anula la aprobación?
-- ¿Cuántos pasos o dudas tuvo en cada tarea?
+- ¿Revisa con la persona el dato de salud de R-01? ¿Nota que editar anula la aprobación?
+- ¿Usa el panel lateral (Responsable ahora / Próximo paso) o lo ignora?
 
-> Pendiente: vincular cada tarea con su requerimiento de la **MLD vigente**.
+> Pendiente: vincular cada tarea con su requerimiento de la **MLD vigente**. Respaldo del referente: `REFERENTE_HELP_SCOUT_UX_ACLARA.md`.
 
 ## Modificar textos o casos
-Edita `datos.js` (nombres, casos, cartas de muestra, motivos) y luego reinicia la demostración. La V1 queda recuperable en la etiqueta `v1-prototipo` del repositorio.
+Edita `datos.js` y reinicia la demostración. Versiones anteriores: etiquetas `v1-prototipo` y `v3-light` del repositorio.
