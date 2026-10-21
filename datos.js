@@ -17,10 +17,10 @@ const MOTIVOS_NO_ENTREGA = [
 
 // Texto de ayuda que aparece bajo el selector de rol
 const AYUDA_ROL = {
-  'Coordinación': 'Asignas personas a cada caso, revisas las cartas antes de que se entreguen y resuelves avisos.',
-  'Escritora': 'Escribes a la persona asignada. Tu carta se revisa antes de entregarse. La persona puede no responder.',
-  'Mediadora': 'Llevas en tu visita las cartas ya preparadas y registras qué pasó. No ves información clínica.',
-  'Referente institucional': 'Escenario de prueba: elige cómo llegaría la carta a tu institución. Son dos alternativas en estudio.'
+  'Coordinación': 'Asignas personas, revisas las cartas antes de su entrega y resuelves avisos.',
+  'Escritora': 'Escribes a las personas que te asignaron. Cada carta se revisa antes de entregarse. La persona puede no responder.',
+  'Mediadora': 'Llevas a tu visita las cartas ya preparadas y registras qué pasó. También gestionas respuestas dictadas.',
+  'Referente institucional': 'Recibes en tu institución cartas para entregarlas en mano.'
 };
 
 // Imagen ficticia de una carta manuscrita (no es una carta real)
